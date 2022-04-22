@@ -51,8 +51,20 @@ class UserService {
     static async deleteUser(userId) {
         const userExist = await UserRepository.findById(userId);
         if (!userExist) return this._serviceResponse(404, 'User not found.');
-        userExist.deletedAt = new Date();
+        await userExist.update({
+            deletedAt: new Date(),
+        });
+
         return this._serviceResponse(200, 'Successfully deleted user.');
+    }
+
+    static async addMoney(userId, amount) {
+        const userExist = await UserRepository.findById(userId);
+        if (!userExist) return this._serviceResponse(404, 'User not found.');
+        await userExist.update({
+            deposit: userExist.deposit + parseInt(amount),
+        });
+        return this._serviceResponse(200, `Successfully depisted ${amount}.`);
     }
 }
 

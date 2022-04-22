@@ -25,8 +25,8 @@ class MyApp {
     }
 
     initRoute() {
+        this.app.use('/api/v1', userRoutes);
         this.app.use('/', swaggerUi.serve, swaggerUi.setup(swagger));
-        this.app.use(userRoutes);
         this.app.use(notFoundMiddleware);
     }
 

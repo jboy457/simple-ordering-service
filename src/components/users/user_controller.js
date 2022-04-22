@@ -42,9 +42,9 @@ module.exports = Object.freeze({
 
     editUser: async (req, res) => {
         try {
-            const { params } = req;
+            const { user } = req;
             const { status, message, data } = await UserService.updateUser(
-                params.userId,
+                user.id,
             );
             return new Response(res, status, message, data);
         } catch (err) {
@@ -55,9 +55,23 @@ module.exports = Object.freeze({
 
     deleteUser: async (req, res) => {
         try {
-            const { params } = req;
+            const { user } = req;
             const { status, message, data } = await UserService.deleteUser(
-                params.userId,
+                user.id,
+            );
+            return new Response(res, status, message, data);
+        } catch (err) {
+            logger.error(err);
+            return new Response(res, 500);
+        }
+    },
+
+    deposit: async (req, res) => {
+        try {
+            const { user, body } = req;
+            const { status, message, data } = await UserService.addMoney(
+                user.id,
+                body.amount,
             );
             return new Response(res, status, message, data);
         } catch (err) {

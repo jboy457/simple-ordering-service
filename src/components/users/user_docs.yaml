@@ -1,0 +1,263 @@
+paths:
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create user data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+
+      responses:
+        '201':
+          description: Successfully created user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '409':
+          description: User already exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - User
+      summary: Get users data
+      parameters:
+        - $ref: '#/components/parameters/pageNo'
+        - $ref: '#/components/parameters/perPage'
+      responses:
+        '200':
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - User
+      summary: Edit users data
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+
+      responses:
+        '200':
+          description: Successfully updated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - User
+      summary: Delete users data
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Successfully deleted user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}: 
+    get:
+      tags:
+        - User
+      summary: Get users data
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /deposit: 
+    patch:
+      tags:
+        - User
+      summary: Buyer Deposit Money
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmountSchema'
+      responses:
+        '200':
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components: 
+  schemas: 
+    SuccessObj: 
+      type: object
+      properties: 
+        status: 
+          type: string
+        message: 
+          type: string
+        data:
+          type: object
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    CreateUser:
+      type: object
+      properties: 
+        username: 
+          type: string
+        password: 
+          type: string
+        role: 
+          type: string
+    UpdateUser:
+      type: object
+      properties: 
+        username: 
+          type: string
+        role: 
+          type: string
+    AmountSchema:
+      type: object
+      properties: 
+        amount: 
+          type: number
+  
+  parameters:
+    token:
+      in: header
+      name: x-auth-token
+      required: true
+      schema:
+        type: string
+    userId:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: number
+    perPage:
+      in: query
+      name: perPage
+      schema:
+        type: number
+    pageNo:
+      in: query
+      name: pageNo
+      schema:
+        type: number
+    

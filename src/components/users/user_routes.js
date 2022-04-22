@@ -1,7 +1,13 @@
 const { Router } = require('express');
 const controllers = require('./user_controller');
 const { validate } = require('../../utils');
-const { UserSchema, UserIdSchema } = require('./user_schema');
+const {
+    UserSchema,
+    UserIdSchema,
+    UpdateUserSchema,
+    UserDepositSchema,
+} = require('./user_schema');
+const { isAuthenticated } = require('../../middlewares/auth/is_authenticated');
 
 class UserRoutes {
     constructor() {
@@ -11,21 +17,29 @@ class UserRoutes {
 
     initRoutes() {
         this.router.post('/users', validate(UserSchema), controllers.addUser);
-        this.router.get('/users', validate(UserSchema), controllers.getAllUser);
+        this.router.get('/users', controllers.getAllUser);
+        this.router.put(
+            '/users',
+            isAuthenticated,
+            validate(UpdateUserSchema),
+            controllers.editUser,
+        );
+        this.router.delete(
+            '/users',
+            isAuthenticated,
+            validate(UserIdSchema),
+            controllers.deleteUser,
+        );
+        this.router.patch(
+            '/deposit',
+            isAuthenticated,
+            validate(UserDepositSchema),
+            controllers.deposit,
+        );
         this.router.get(
             '/users/:userId',
             validate(UserIdSchema),
             controllers.getUser,
-        );
-        this.router.put(
-            '/users/:userId',
-            validate(UserIdSchema),
-            controllers.editUser,
-        );
-        this.router.delete(
-            '/users/:userId',
-            validate(UserIdSchema),
-            controllers.deleteUser,
         );
     }
 }
