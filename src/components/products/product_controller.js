@@ -55,7 +55,7 @@ module.exports = Object.freeze({
     },
     deleteProduct: async (req, res) => {
         try {
-            const { user, body } = req;
+            const { user, body, params } = req;
             const { status, message, data } =
                 await ProductService.deleteProduct(
                     params.productId,

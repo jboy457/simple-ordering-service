@@ -8,7 +8,7 @@ const {
     UserDepositSchema,
     UserLoginSchema,
 } = require('./user_schema');
-const { isAuthenticated } = require('../../middlewares/auth/is_authenticated');
+const { isAuthenticated, isBuyer } = require('../../middlewares/auth');
 
 class UserRoutes {
     constructor() {
@@ -34,6 +34,7 @@ class UserRoutes {
         this.router.patch(
             '/deposit',
             isAuthenticated,
+            isBuyer,
             validate(UserDepositSchema),
             controllers.deposit,
         );

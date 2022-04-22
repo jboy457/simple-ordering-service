@@ -50,7 +50,7 @@ class ProductService {
         return this._serviceResponse(200, 'Successfully updated product.');
     }
 
-    static async deleteProduct(productId, sellerId, updatedProduct) {
+    static async deleteProduct(productId, sellerId) {
         const product = await ProductRepository.findSellerProduct(
             productId,
             sellerId,

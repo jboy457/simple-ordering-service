@@ -11,6 +11,7 @@ const swagger = require('./docs/swagger');
 
 // Components
 const { routes: userRoutes } = require('./components/users');
+const { routes: productRoutes } = require('./components/products');
 
 class MyApp {
     constructor() {
@@ -26,6 +27,7 @@ class MyApp {
 
     initRoute() {
         this.app.use('/api/v1', userRoutes);
+        this.app.use('/api/v1', productRoutes);
         this.app.use('/', swaggerUi.serve, swaggerUi.setup(swagger));
         this.app.use(notFoundMiddleware);
     }

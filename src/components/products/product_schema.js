@@ -15,13 +15,13 @@ const UpdateProductSchema = Joi.object({
         amountAvailable: Joi.number().required(),
     }),
     params: Joi.object({
-        userId: Joi.number().required().label('productId'),
+        productId: Joi.number().required().label('productId'),
     }),
 }).options({ allowUnknown: true });
 
 const ProductIdSchema = Joi.object({
     params: Joi.object({
-        userId: Joi.number().required().label('productId'),
+        productId: Joi.number().required().label('productId'),
     }),
 }).options({ allowUnknown: true });
 

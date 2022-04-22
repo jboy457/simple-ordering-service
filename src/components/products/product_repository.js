@@ -2,7 +2,7 @@ const { Product } = require('../../config');
 
 class ProductRepository {
     static async create(newProduct) {
-        const product = await Product.create(newUser);
+        const product = await Product.create(newProduct);
         return product;
     }
 

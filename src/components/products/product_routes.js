@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const controllers = require('./product_controller');
 const { validate } = require('../../utils');
-const { isAuthenticated } = require('../../middlewares/auth/is_authenticated');
+const { isAuthenticated, isSeller } = require('../../middlewares/auth');
 const {
     ProductIdSchema,
     UpdateProductSchema,
@@ -18,6 +18,7 @@ class UserRoutes {
         this.router.post(
             '/products',
             isAuthenticated,
+            isSeller,
             validate(CreateProductSchema),
             controllers.addProduct,
         );
@@ -30,12 +31,14 @@ class UserRoutes {
         this.router.put(
             '/products/:productId',
             isAuthenticated,
+            isSeller,
             validate(UpdateProductSchema),
             controllers.updateProduct,
         );
         this.router.delete(
             '/products/:productId',
             isAuthenticated,
+            isSeller,
             validate(ProductIdSchema),
             controllers.deleteProduct,
         );

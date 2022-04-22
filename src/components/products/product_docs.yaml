@@ -205,7 +205,7 @@ components:
           type: string
         cost: 
           type: number
-        availableAmount: 
+        amountAvailable: 
           type: number
   
   parameters:
