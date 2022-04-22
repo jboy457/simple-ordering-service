@@ -8,4 +8,10 @@ const UserSchema = Joi.object({
     }),
 }).options({ allowUnknown: true });
 
-module.exports = { UserSchema };
+const UserIdSchema = Joi.object({
+    params: Joi.object({
+        userId: Joi.string().uuid().required().label('userId'),
+    }),
+}).options({ allowUnknown: true });
+
+module.exports = { UserSchema, UserIdSchema };

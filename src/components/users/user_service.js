@@ -23,6 +23,37 @@ class UserService {
             newUser,
         );
     }
+
+    static async getUserById(userId) {
+        const userExist = await UserRepository.findById(userId);
+        if (!userExist) return this._serviceResponse(404, 'User not found.');
+        return this._serviceResponse(
+            200,
+            'Successfully fetched user.',
+            userExist,
+        );
+    }
+
+    static async getUsers(query) {
+        const pageNo = query.pageNo ? +query.pageNo : 1;
+        const perPage = query.perPage ? +query.perPage : 10;
+        const users = await UserRepository.findAll(pageNo, perPage);
+        return this._serviceResponse(200, 'Successfully fetched user.', users);
+    }
+
+    static async updateUser(userId, userUpdate) {
+        const userExist = await UserRepository.findById(userId);
+        if (!userExist) return this._serviceResponse(404, 'User not found.');
+        await userExist.update(userUpdate);
+        return this._serviceResponse(200, 'Successfully updated user');
+    }
+
+    static async deleteUser(userId) {
+        const userExist = await UserRepository.findById(userId);
+        if (!userExist) return this._serviceResponse(404, 'User not found.');
+        userExist.deletedAt = new Date();
+        return this._serviceResponse(200, 'Successfully deleted user.');
+    }
 }
 
 module.exports = { UserService };

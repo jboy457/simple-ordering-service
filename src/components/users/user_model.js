@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
                 enum: ['buyer', 'seller'],
                 allowNull: false,
             },
+            deletedAt: {
+                type: DataTypes.DATE,
+                allowNull: true,
+            },
         },
         {
             timestamp: true,

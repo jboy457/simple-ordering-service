@@ -6,6 +6,13 @@ class UserRepository {
         return user;
     }
 
+    static async findById(id) {
+        const user = await User.findOne({
+            where: { id },
+        });
+        return user;
+    }
+
     static async findByUsername(username) {
         const user = await User.findOne({
             where: {
@@ -15,9 +22,13 @@ class UserRepository {
         return user;
     }
 
-    static async findAll() {
-        const users = await User.findAll();
-        return users;
+    static async findAll(pageNo, perPage) {
+        const { rows: users, count } = await User.findAndCountAll({
+            order: [['id', 'DESC']],
+            limit: perPage,
+            offset: pageNo * perPage - perPage,
+        });
+        return { users, count, pageNo, perPage };
     }
 }
 
