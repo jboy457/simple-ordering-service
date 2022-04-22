@@ -24,6 +24,11 @@ const swaggerDefinition = {
             description:
                 'This endpoint provides information about a particular user',
         },
+        {
+            name: 'Product',
+            description:
+                'This endpoint provides information about a particular product',
+        },
     ],
 };
 

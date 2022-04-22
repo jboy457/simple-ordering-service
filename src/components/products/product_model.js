@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define(
-        'User',
+    const Product = sequelize.define(
+        'Product',
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -9,28 +9,23 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true,
                 primaryKey: true,
             },
-            username: {
+            sellerId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                unique: true,
+            },
+            productName: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true,
             },
-            password: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            deposit: {
+            cost: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+            },
+            amountAvailable: {
+                type: DataTypes.INTEGER,
                 defaultValue: 0,
-            },
-            role: {
-                type: DataTypes.STRING,
-                enum: ['buyer', 'seller'],
-                allowNull: false,
-            },
-            deletedAt: {
-                type: DataTypes.DATE,
-                allowNull: true,
             },
         },
         {
@@ -38,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         },
     );
 
-    User.associate = models => {
-        User.hasMany(models.Product, {
-            onDelete: 'cascade',
+    Product.associate = models => {
+        Product.belongsTo(models.User, {
+            foriegnKey: 'selletId',
         });
     };
 
-    return User;
+    return Product;
 };

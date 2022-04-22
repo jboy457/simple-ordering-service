@@ -1,0 +1,218 @@
+paths:
+  /products:
+    post:
+      tags:
+        - Product
+      summary: Create product data
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+
+      responses:
+        '201':
+          description: Successfully created product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - Product
+      summary: Get products
+      parameters:
+        - $ref: '#/components/parameters/pageNo'
+        - $ref: '#/components/parameters/perPage'
+      responses:
+        '200':
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+   
+  /products/{productId}: 
+    get:
+      tags:
+        - Product
+      summary: Get singel product data
+      parameters:
+        - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          description: Successfully fetched product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Product
+      summary: Edit product data
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/productId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+
+      responses:
+        '200':
+          description: Successfully updated product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Product
+      summary: Delete product data
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/productId'
+      responses:
+        '200':
+          description: Successfully deleted product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /buy: 
+    patch:
+      tags:
+        - Product
+      summary: Buyer Deposit Money
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AmountSchema'
+      responses:
+        '200':
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components: 
+  schemas: 
+    CreateProduct:
+      type: object
+      properties: 
+        productName: 
+          type: string
+        cost: 
+          type: number
+        availableAmount: 
+          type: number
+  
+  parameters:
+    productId:
+      in: path
+      name: productId
+      required: true
+      schema:
+        type: number
+    
