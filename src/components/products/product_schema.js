@@ -8,6 +8,13 @@ const CreateProductSchema = Joi.object({
     }),
 }).options({ allowUnknown: true });
 
+const BuyProduct = Joi.object({
+    body: Joi.object({
+        productId: Joi.number().required().label('productId'),
+        amount: Joi.number().required(),
+    }),
+}).options({ allowUnknown: true });
+
 const UpdateProductSchema = Joi.object({
     body: Joi.object({
         productName: Joi.string().trim().required(),
@@ -29,4 +36,5 @@ module.exports = {
     CreateProductSchema,
     ProductIdSchema,
     UpdateProductSchema,
+    BuyProduct,
 };

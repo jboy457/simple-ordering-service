@@ -9,7 +9,7 @@ class Response {
 
     send() {
         let status = 'error';
-        if (this.statusCode <= 400) status = 'success';
+        if (this.statusCode < 400) status = 'success';
         if (this.statusCode === 500) this.message = 'Something went wrong';
         return this.responseHandler.status(this.statusCode).json({
             status,

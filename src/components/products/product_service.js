@@ -1,3 +1,4 @@
+const { UserRepository } = require('../users/user_repository');
 const { ProductRepository } = require('./product_repository');
 
 class ProductService {
@@ -10,6 +11,12 @@ class ProductService {
     }
 
     static async createProduct(sellerId, productToCreate) {
+        const productExist = await ProductRepository.findSellerProductByName(
+            sellerId,
+            productToCreate.productName,
+        );
+        if (productExist)
+            return this._serviceResponse(409, 'Product already exist.');
         const newProduct = { ...productToCreate, sellerId };
         const product = await ProductRepository.create(newProduct);
         return this._serviceResponse(
@@ -58,6 +65,42 @@ class ProductService {
         if (!product) return this._serviceResponse(404, 'Product not found.');
         await product.destroy();
         return this._serviceResponse(200, 'Successfully deleted product.');
+    }
+
+    static async buyProduct(productId, amount, user) {
+        const product = await ProductRepository.findById(productId);
+        if (!product) return this._serviceResponse(404, 'Product not found');
+
+        // check if product item is enough
+        if (product.amountAvailable < amount)
+            return this._serviceResponse(400, `Insufficent available product.`);
+        const totalCost = amount * product.cost;
+
+        // check if user balance is sufficient
+        if (totalCost > user.deposit)
+            return this._serviceResponse(400, 'Insufficient balance');
+
+        // Charge user
+        const balance = user.deposit - totalCost;
+        await user.update({
+            deposit: balance,
+        });
+
+        // update product
+        await product.update({
+            amountAvailable: product.amountAvailable - amount,
+        });
+
+        // Credit seller
+        const seller = await UserRepository.findById(product.sellerId);
+        await seller.update({
+            deposit: seller.deposit + totalCost,
+        });
+        return this._serviceResponse(
+            200,
+            `Successfully purchased ${product.productName}`,
+            { totalCost, balance, product },
+        );
     }
 }
 

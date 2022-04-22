@@ -10,6 +10,7 @@ module.exports = Object.freeze({
                 await ProductService.createProduct(user.id, body);
             return new Response(res, status, message, data);
         } catch (err) {
+            console.log(err);
             logger.error(err);
             return new Response(res, 500);
         }
@@ -62,6 +63,21 @@ module.exports = Object.freeze({
                     user.id,
                     body,
                 );
+            return new Response(res, status, message, data);
+        } catch (err) {
+            logger.error(err);
+            return new Response(res, 500);
+        }
+    },
+
+    buyProduct: async (req, res) => {
+        try {
+            const { body, user } = req;
+            const { status, message, data } = await ProductService.buyProduct(
+                body.productId,
+                body.amount,
+                user,
+            );
             return new Response(res, status, message, data);
         } catch (err) {
             logger.error(err);

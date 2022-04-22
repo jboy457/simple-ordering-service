@@ -12,12 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             sellerId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                unique: true,
             },
             productName: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
             },
             cost: {
                 type: DataTypes.INTEGER,
@@ -35,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Product.associate = models => {
         Product.belongsTo(models.User, {
-            foriegnKey: 'selletId',
+            foriegnKey: 'sellerId',
         });
     };
 

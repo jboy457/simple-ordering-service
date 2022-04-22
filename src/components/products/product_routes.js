@@ -1,11 +1,16 @@
 const { Router } = require('express');
 const controllers = require('./product_controller');
 const { validate } = require('../../utils');
-const { isAuthenticated, isSeller } = require('../../middlewares/auth');
+const {
+    isAuthenticated,
+    isSeller,
+    isBuyer,
+} = require('../../middlewares/auth');
 const {
     ProductIdSchema,
     UpdateProductSchema,
     CreateProductSchema,
+    BuyProduct,
 } = require('./product_schema');
 
 class UserRoutes {
@@ -41,6 +46,13 @@ class UserRoutes {
             isSeller,
             validate(ProductIdSchema),
             controllers.deleteProduct,
+        );
+        this.router.post(
+            '/buy',
+            isAuthenticated,
+            isBuyer,
+            validate(BuyProduct),
+            controllers.buyProduct,
         );
     }
 }

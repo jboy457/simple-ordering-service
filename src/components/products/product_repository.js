@@ -13,6 +13,13 @@ class ProductRepository {
         return product;
     }
 
+    static async findSellerProductByName(sellerId, productName) {
+        const product = await Product.findOne({
+            where: { sellerId, productName },
+        });
+        return product;
+    }
+
     static async findSellerProduct(id, sellerId) {
         const product = await Product.findOne({
             where: { id, sellerId },
