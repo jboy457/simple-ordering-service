@@ -236,6 +236,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /reset: 
+    patch:
+      tags:
+        - User
+      summary: Buyer Reset Deposit
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Successfully reseted users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components: 
   schemas: 
     SuccessObj: 

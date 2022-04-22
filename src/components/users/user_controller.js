@@ -41,6 +41,19 @@ module.exports = Object.freeze({
         }
     },
 
+    resetUser: async (req, res) => {
+        try {
+            const { user } = req;
+            const { status, message, data } = await UserService.resetDeposit(
+                user.id,
+            );
+            return new Response(res, status, message, data);
+        } catch (err) {
+            logger.error(err);
+            return new Response(res, 500);
+        }
+    },
+
     getAllUser: async (req, res) => {
         try {
             const { query } = req;

@@ -89,6 +89,15 @@ class UserService {
         });
         return this._serviceResponse(200, `Successfully depisted ${amount}.`);
     }
+
+    static async resetDeposit(userId) {
+        const userExist = await UserRepository.findById(userId);
+        if (!userExist) return this._serviceResponse(404, 'User not found.');
+        await userExist.update({
+            deposit: 0,
+        });
+        return this._serviceResponse(200, `Successfully reseted deposit.`);
+    }
 }
 
 module.exports = { UserService };

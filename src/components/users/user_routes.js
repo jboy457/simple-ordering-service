@@ -38,6 +38,12 @@ class UserRoutes {
             validate(UserDepositSchema),
             controllers.deposit,
         );
+        this.router.patch(
+            '/reset',
+            isAuthenticated,
+            isBuyer,
+            controllers.resetUser,
+        );
         this.router.post(
             '/user/login',
             validate(UserLoginSchema),
