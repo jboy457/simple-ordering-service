@@ -9,6 +9,9 @@ const { notFoundMiddleware, errorHandlerMiddleware } = require('./middlewares');
 const swaggerUi = require('swagger-ui-express');
 const swagger = require('./docs/swagger');
 
+// Components
+const { routes: userRoutes } = require('./components/users');
+
 class MyApp {
     constructor() {
         this.app = express();
@@ -23,8 +26,8 @@ class MyApp {
 
     initRoute() {
         this.app.use('/', swaggerUi.serve, swaggerUi.setup(swagger));
+        this.app.use(userRoutes);
         this.app.use(notFoundMiddleware);
-        this.app.use(errorHandlerMiddleware);
     }
 
     initMiddleware() {
