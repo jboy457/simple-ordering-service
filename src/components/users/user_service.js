@@ -1,4 +1,4 @@
-const { Hash } = require('../../utils');
+const { Hash, JWT } = require('../../utils');
 const { UserRepository } = require('./user_repository');
 
 class UserService {
@@ -22,6 +22,29 @@ class UserService {
             'Successfully created user.',
             newUser,
         );
+    }
+
+    static async authenticateUser(userToAuth) {
+        const userExist = await UserRepository.findByUsername(
+            userToAuth.username,
+        );
+        if (!userExist)
+            return this._serviceResponse(401, 'Invalid credentails');
+        const passIsCorrect = await Hash.verify(
+            userToAuth.password,
+            userExist.password,
+        );
+        if (!passIsCorrect)
+            return this._serviceResponse(401, 'Invalid credentails');
+        const token = await JWT.sign({
+            id: userExist.id,
+            role: userExist.role,
+        });
+        userExist.password = undefined;
+        return this._serviceResponse(201, 'Successfully loggedIn user.', {
+            token,
+            user: userExist,
+        });
     }
 
     static async getUserById(userId) {

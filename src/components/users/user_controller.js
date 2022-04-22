@@ -16,6 +16,18 @@ module.exports = Object.freeze({
         }
     },
 
+    loginUser: async (req, res) => {
+        try {
+            const { body } = req;
+            const { status, message, data } =
+                await UserService.authenticateUser(body);
+            return new Response(res, status, message, data);
+        } catch (err) {
+            logger.error(err);
+            return new Response(res, 500);
+        }
+    },
+
     getUser: async (req, res) => {
         try {
             const { params } = req;
@@ -42,9 +54,10 @@ module.exports = Object.freeze({
 
     editUser: async (req, res) => {
         try {
-            const { user } = req;
+            const { user, body } = req;
             const { status, message, data } = await UserService.updateUser(
                 user.id,
+                body,
             );
             return new Response(res, status, message, data);
         } catch (err) {

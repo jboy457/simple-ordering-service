@@ -8,6 +8,13 @@ const UserSchema = Joi.object({
     }),
 }).options({ allowUnknown: true });
 
+const UserLoginSchema = Joi.object({
+    body: Joi.object({
+        username: Joi.string().trim().required(),
+        password: Joi.string().min(4).required(),
+    }),
+}).options({ allowUnknown: true });
+
 const UserIdSchema = Joi.object({
     params: Joi.object({
         userId: Joi.number().required().label('userId'),
@@ -32,4 +39,5 @@ module.exports = {
     UserIdSchema,
     UpdateUserSchema,
     UserDepositSchema,
+    UserLoginSchema,
 };

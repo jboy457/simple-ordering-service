@@ -6,6 +6,7 @@ const {
     UserIdSchema,
     UpdateUserSchema,
     UserDepositSchema,
+    UserLoginSchema,
 } = require('./user_schema');
 const { isAuthenticated } = require('../../middlewares/auth/is_authenticated');
 
@@ -35,6 +36,11 @@ class UserRoutes {
             isAuthenticated,
             validate(UserDepositSchema),
             controllers.deposit,
+        );
+        this.router.post(
+            '/user/login',
+            validate(UserLoginSchema),
+            controllers.loginUser,
         );
         this.router.get(
             '/users/:userId',

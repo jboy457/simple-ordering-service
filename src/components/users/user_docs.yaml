@@ -153,6 +153,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: Authenitcate User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+
+      responses:
+        '200':
+          description: Successfully loggedIn user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObj'
+
+        '401':
+          description: Invalid credentails.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+        default:
+          description: An error occured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /deposit: 
     patch:
       tags:
@@ -223,6 +262,13 @@ components:
         password: 
           type: string
         role: 
+          type: string
+    LoginUser:
+      type: object
+      properties: 
+        username: 
+          type: string
+        password: 
           type: string
     UpdateUser:
       type: object
