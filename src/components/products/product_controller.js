@@ -10,7 +10,6 @@ module.exports = Object.freeze({
                 await ProductService.createProduct(user.id, body);
             return new Response(res, status, message, data);
         } catch (err) {
-            console.log(err);
             logger.error(err);
             return new Response(res, 500);
         }
