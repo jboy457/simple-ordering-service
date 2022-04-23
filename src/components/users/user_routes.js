@@ -45,7 +45,7 @@ class UserRoutes {
             controllers.resetUser,
         );
         this.router.post(
-            '/user/login',
+            '/users/login',
             validate(UserLoginSchema),
             controllers.loginUser,
         );
