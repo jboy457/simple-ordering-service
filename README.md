@@ -38,4 +38,4 @@ npm run test:only <test file name>
 
 - API Document endpoints
 
-  swagger-ui  Endpoint : http://localhost:<Port>
+  swagger-ui  Endpoint : http://localhost:{PORT}
