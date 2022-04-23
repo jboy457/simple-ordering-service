@@ -1,6 +1,5 @@
 const compression = require('compression');
 const express = require('express');
-const path = require('path');
 const cors = require('cors');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
