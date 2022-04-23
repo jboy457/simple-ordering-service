@@ -41,7 +41,7 @@ class UserService {
             role: userExist.role,
         });
         userExist.password = undefined;
-        return this._serviceResponse(201, 'Successfully loggedIn user.', {
+        return this._serviceResponse(200, 'Successfully loggedIn user.', {
             token,
             user: userExist,
         });
