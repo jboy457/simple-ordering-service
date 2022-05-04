@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
-const { LoggerStream, sequelize, logger } = require('./config');
+const { LoggerStream, sequelize, logger, redisClient } = require('./config');
 const { notFoundMiddleware, errorHandlerMiddleware } = require('./middlewares');
 const swaggerUi = require('swagger-ui-express');
 const swagger = require('./docs/swagger');
@@ -19,7 +19,7 @@ class MyApp {
     }
 
     init() {
-        this.initSequelize();
+        this.initDB();
         this.initMiddleware();
         this.initRoute();
     }
@@ -39,10 +39,11 @@ class MyApp {
         this.app.use(express.json());
     }
 
-    initSequelize() {
+    initDB() {
         sequelize.sync().then(async () => {
             logger.info('Database connected!!');
         });
+        redisClient.connect();
     }
 }
 

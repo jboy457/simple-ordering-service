@@ -1,5 +1,5 @@
 const { UserRepository } = require('../../components/users/user_repository');
-const { logger } = require('../../config');
+const { logger, redisClient } = require('../../config');
 const { Response, JWT } = require('../../utils');
 
 module.exports = Object.freeze({
@@ -12,9 +12,14 @@ module.exports = Object.freeze({
                     'Unauthorized user. Log in and try again',
                 );
             const { id: userId } = await JWT.verify(req.header('x-auth-token'));
-            console.log(userId);
             if (!userId) return new Response(res, 401, 'Session Expired');
-            const user = await UserRepository.findById(userId);
+            let user;
+            const cachedUser = await redisClient.get(`users:${userId}`);
+            user = JSON.parse(cachedUser);
+            if (!user) {
+                user = await UserRepository.findById(userId);
+                redisClient.set(`users:${user.id}`, JSON.stringify(user));
+            }
             if (!user)
                 return new Response(
                     res,
