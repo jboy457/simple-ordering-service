@@ -10,6 +10,23 @@ class ProductService {
         };
     }
 
+    static _convertToCoins(balance) {
+        let amount = +balance;
+        const allowedCoins = [5, 10, 20, 50, 100].reverse();
+        const coins = [];
+
+        for (var i = 0; i < allowedCoins.length; i++) {
+            if (amount >= allowedCoins[i]) {
+                amount = amount - allowedCoins[i];
+                coins.push(allowedCoins[i]);
+                i--;
+            }
+        }
+
+        // check if amount is still left
+        if (amount < balance && amount !== 0) coins.push(amount);
+        return coins;
+    }
     static async createProduct(sellerId, productToCreate) {
         const productExist = await ProductRepository.findSellerProductByName(
             sellerId,
@@ -68,6 +85,7 @@ class ProductService {
     }
 
     static async buyProduct(productId, amount, user) {
+        const checkUser = await UserRepository.findById(user.id);
         const product = await ProductRepository.findById(productId);
         if (!product) return this._serviceResponse(404, 'Product not found');
 
@@ -77,12 +95,12 @@ class ProductService {
         const totalCost = amount * product.cost;
 
         // check if user balance is sufficient
-        if (totalCost > user.deposit)
+        if (totalCost > checkUser.deposit)
             return this._serviceResponse(400, 'Insufficient balance');
 
         // Charge user
-        const balance = user.deposit - totalCost;
-        await user.update({
+        const balance = checkUser.deposit - totalCost;
+        await checkUser.update({
             deposit: balance,
         });
 
@@ -96,10 +114,11 @@ class ProductService {
         await seller.update({
             deposit: seller.deposit + totalCost,
         });
+        const coinBalance = this._convertToCoins(balance);
         return this._serviceResponse(
             200,
             `Successfully purchased ${product.productName}`,
-            { totalCost, balance, product },
+            { totalCost, coinBalance, product },
         );
     }
 }
