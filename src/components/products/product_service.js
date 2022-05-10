@@ -1,3 +1,4 @@
+const db = require('../../config/database').sequelize;
 const { UserRepository } = require('../users/user_repository');
 const { ProductRepository } = require('./product_repository');
 
@@ -97,29 +98,46 @@ class ProductService {
         // check if user balance is sufficient
         if (totalCost > checkUser.deposit)
             return this._serviceResponse(400, 'Insufficient balance');
+        const dbTranx = await db.transaction();
 
-        // Charge user
-        const balance = checkUser.deposit - totalCost;
-        await checkUser.update({
-            deposit: balance,
-        });
+        try {
+            // Charge user
+            const balance = checkUser.deposit - totalCost;
+            await checkUser.update(
+                {
+                    deposit: balance,
+                },
+                { transaction: dbTranx },
+            );
 
-        // update product
-        await product.update({
-            amountAvailable: product.amountAvailable - amount,
-        });
+            // update product
+            await product.update(
+                {
+                    amountAvailable: product.amountAvailable - amount,
+                },
+                { transaction: dbTranx },
+            );
 
-        // Credit seller
-        const seller = await UserRepository.findById(product.sellerId);
-        await seller.update({
-            deposit: seller.deposit + totalCost,
-        });
-        const coinBalance = this._convertToCoins(balance);
-        return this._serviceResponse(
-            200,
-            `Successfully purchased ${product.productName}`,
-            { totalCost, coinBalance, product },
-        );
+            // Credit seller
+            const seller = await UserRepository.findById(product.sellerId);
+            await seller.update(
+                {
+                    deposit: seller.deposit + totalCost,
+                },
+                { transaction: dbTranx },
+            );
+            await dbTranx.commit();
+            const coinBalance = this._convertToCoins(balance);
+            return this._serviceResponse(
+                200,
+                `Successfully purchased ${product.productName}`,
+                { totalCost, coinBalance, product },
+            );
+        } catch (err) {
+            console.log(err);
+            await dbTranx.rollback();
+            return this._serviceResponse(400, `Purchase not successful`);
+        }
     }
 }
 

@@ -79,6 +79,7 @@ module.exports = Object.freeze({
             );
             return new Response(res, status, message, data);
         } catch (err) {
+            console.log(err);
             logger.error(err);
             return new Response(res, 500);
         }
