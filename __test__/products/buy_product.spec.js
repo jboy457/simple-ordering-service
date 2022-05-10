@@ -45,7 +45,7 @@ beforeAll(async () => {
     server = request(app);
     token = await JWT.sign({
         id: existingUserTestCase[1].id,
-        username: existingUserTestCase[1].username,
+        role: existingUserTestCase[1].role,
     });
     await User.bulkCreate(existingUserTestCase);
     await Product.create(existingProductTestCase);

@@ -27,7 +27,7 @@ beforeAll(async () => {
     server = request(app);
     token = await JWT.sign({
         id: existingTestCase.id,
-        username: existingTestCase.username,
+        role: existingTestCase.role,
     });
     await User.create(existingTestCase);
 });
